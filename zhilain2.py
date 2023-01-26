@@ -16,7 +16,7 @@ class zhilianSpider(object):
     def __init__(self):
         self.jobnamekw='python'
         self.jobaddress='兰州'
-        self.url ='https://sou.zhaopin.com/?jl=864&kw=python&p='
+        self.url ='https://sou.zhaopin.com/?jl='+self.jobaddress+'&kw='+self.jobnamekw+'&p='
         # 存放所有URL地址的队列
         self.q = Queue()
         self.count=0
@@ -24,8 +24,6 @@ class zhilianSpider(object):
         # 存放第一层URL解析结果的的空列表
         self.list = []
         self.p=[]
-        #存放第二层URL网页解析的空字典
-        self.items={}
         self.page=0
         self.f = open('zhilian_'+self.jobaddress+'_'+self.jobnamekw+'.csv', mode='a',encoding='utf-8',newline='')
         self.csv_writer= csv.DictWriter(self.f,fieldnames=['title','money','context','address','compay', 'url'])
@@ -84,14 +82,9 @@ class zhilianSpider(object):
         item['address']=two_html.xpath('//span[@class="job-address__content-text"]/text()')
         item['compay']=two_html.xpath('//a[@class="company__title"]/text()')
         item['url']=urls
-        #self.items[i]=item
-        #self.lock.acquire()
-        print(str(pos_url)+'文件获得锁')
+        
         self.csv_writer.writerow(item) 
-        #self.lock.release()
-        print(str(pos_url)+'文件释放锁')
-
-
+       
   # 获取第一层解析后的列表
     def get_list(self):
        if(len(self.p))!=0:
